@@ -1,9 +1,11 @@
 # Pipeline ETL End-to-End con Arquitectura Medallion en Azure Databricks para el Sector Salud
 
 ## 📝 Descripción del Proyecto
-Este repositorio contiene la implementación de un pipeline de datos (ETL) automatizado de punta a punta, diseñado para procesar de forma segura y eficiente datos críticos del sector salud. Utilizando la **Arquitectura Medallion**, los datos crudos pasan por un proceso riguroso de extracción, limpieza, transformación y enriquecimiento hasta consolidarse en un repositorio analítico listo para la toma de decisiones estratégicas.
+Este repositorio contiene la implementación de un pipeline de datos (ETL) automatizado de punta a punta, diseñado para la optimización de la gestión hospitalaria. El proyecto se enfoca específicamente en el monitoreo en tiempo real de la disponibilidad de equipos médicos críticos y el seguimiento clínico del estado de los pacientes.
 
-La solución está completamente desplegada sobre la plataforma **Azure Databricks**, gobernada bajo un modelo de datos estructurado en **Unity Catalog**, y automatizada mediante un pipeline de **Integración y Despliegue Continuo (CI/CD)** con **GitHub Actions**.
+La solución centraliza los datos provenientes de sensores de equipos biomédicos y registros de pacientes para garantizar una respuesta rápida ante emergencias y una asignación eficiente de recursos hospitalarios. Utilizando la **Arquitectura Medallion en Azure Databricks**, los datos fluyen desde la ingesta cruda hasta la consolidación de KPIs críticos, apoyados por un modelo de gobernanza con Unity Catalog y un pipeline de **CI/CD**  automatizado mediante **GitHub Actions**.
+
+
 
 ---
 
