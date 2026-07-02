@@ -1,55 +1,53 @@
 # Pipeline ETL End-to-End con Arquitectura Medallion en Azure Databricks para el Sector Salud
 
 ## 📝 Descripción del Proyecto
-Este repositorio contiene la implementación de un pipeline de datos (ETL) automatizado de punta a punta, diseñado para la optimización de la gestión hospitalaria. El proyecto se enfoca específicamente en el monitoreo en tiempo real de la disponibilidad de equipos médicos críticos y el seguimiento clínico del estado de los pacientes.
+Este proyecto soluciona un desafío crítico en la gestión hospitalaria: **la falta de visibilidad unificada sobre el estado de los pacientes y la operatividad de los equipos médicos.** Actualmente, muchas instituciones operan con información fragmentada. Esta solución integra dos fuentes de datos fundamentales en un único ecosistema inteligente:
 
-La solución centraliza los datos provenientes de sensores de equipos biomédicos y registros de pacientes para garantizar una respuesta rápida ante emergencias y una asignación eficiente de recursos hospitalarios. Utilizando la **Arquitectura Medallion en Azure Databricks**, los datos fluyen desde la ingesta cruda hasta la consolidación de KPIs críticos, apoyados por un modelo de gobernanza con Unity Catalog y un pipeline de **CI/CD**  automatizado mediante **GitHub Actions**.
+1.  **Monitoreo de Telemedicina (Signos Vitales):** Centralizamos en tiempo real las constantes vitales de los pacientes, permitiendo al personal de salud detectar anomalías de manera oportuna y garantizar un seguimiento clínico ininterrumpido.
+2.  **Gestión de Equipos Biomédicos:** Implementamos un sistema de analítica preventiva que monitorea el uso y estado de los equipos críticos. Esto nos permite identificar proactivamente qué dispositivos requieren mantenimiento antes de que fallen, evitando que un equipo esté fuera de servicio precisamente cuando un paciente más lo necesita.
 
-
+**¿Qué logramos con esto?** La solución garantiza que, cuando un paciente llegue a urgencias o requiera soporte vital, la tecnología esté lista y operativa, y el seguimiento clínico sea preciso. Utilizamos una arquitectura moderna en **Azure Databricks** que procesa estos datos de forma automática, asegurando que la información sea confiable, segura y siempre disponible para los equipos médicos.
 
 ---
 
 ## 🏗️ Arquitectura de Datos (Medallion)
-El procesamiento se divide en tres capas lógicas bien definidas dentro del entorno de **Unity Catalog** (`proyecto_salud_dev`):
+<p align="center">
+  <img src="imagenes/arquitectura_medallion_salud.png" alt="Arquitectura Medallion Salud" width="100%">
+</p>
 
-1. **Capa Bronze (Raw Data):** Ingesta directa de los datos en su formato original. Almacenamiento histórico de los registros crudos de pacientes y disponibilidad de infraestructura médica.
-2. **Capa Silver (Cleansed & Conformed):** Procesos de limpieza, normalización de formatos, manejo de valores nulos y filtrado de anomalías operativas. Los datos se tipifican y se estructuran en tablas Delta optimizadas.
-3. **Capa Gold (Business Level):** Agregación de métricas de negocio y lógica analítica avanzada. Aquí se consolidan los KPIs clave como la tasa de disponibilidad de equipos médicos y los estados agregados de pacientes por criticidad.
+El procesamiento se divide en tres capas lógicas dentro de **Unity Catalog**:
+*   **Capa Bronze (Raw Data):** Ingesta directa de los datos crudos de telemedicina y sensores biomédicos en su formato original.
+*   **Capa Silver (Cleansed & Conformed):** Procesos de limpieza, normalización de formatos y filtrado de anomalías operativas. Estructurado en tablas Delta optimizadas.
+*   **Capa Gold (Business Level):** Agregación de métricas de negocio. KPIs clave como disponibilidad de equipos médicos y estados de pacientes por criticidad.
 
 ---
 
-## 🛠️ Stack Tecnológico Utilizado
-* **Plataforma de Cloud Data:** Azure Databricks.
-* **Motor de Procesamiento:** Apache Spark (PySpark & Spark SQL).
-* **Formato de Almacenamiento:** Delta Lake.
-* **Gobierno de Datos:** Unity Catalog.
-* **Orquestación:** Databricks Workflows (DAG interactivo de notebooks).
-* **Automatización (CI/CD):** GitHub Actions para el despliegue automático del código.
+## 🛠️ Stack Tecnológico
+* **Plataforma:** Azure Databricks.
+* **Motor:** Apache Spark (PySpark & Spark SQL).
+* **Almacenamiento:** Delta Lake.
+* **Gobierno:** Unity Catalog.
+* **Orquestación:** Databricks Workflows.
+* **Automatización:** GitHub Actions (CI/CD).
 
 ---
 
 ## 📂 Estructura del Repositorio
-El repositorio sigue un orden jerárquico corporativo para facilitar la auditoría del proyecto:
-
-* 📁 **`.github/workflows/`**: Contiene `deploy.yml`, el pipeline automatizado de CI/CD que compila y despliega el código en Databricks de manera segura usando credenciales cifradas (`Secrets`).
-* 📁 **`proceso/`**: Cuadernos de producción numerados secuencialmente que ejecutan las fases de Extracción (`02_extract`), Transformación (`03_transform`), Carga de datos (`04_load`), asignación de permisos (`05_grants`) y reversiones (`06_reversion`).
-* 📁 **`PrepAmb/`**: Cuadernos destinados a la configuración inicial del entorno, creación de catálogos y esquemas en Unity Catalog (`01_prep_amb`).
-* 📁 **`dashboard/`**: Almacena las visualizaciones analíticas y tableros construidos a partir de las métricas agregadas de la capa Gold.
-* 📁 **`evidencias/`**: Pruebas técnicas irrefutables del correcto funcionamiento del sistema.
-* 📁 **`certifications/`**: Credenciales técnicas oficiales que respaldan el conocimiento arquitectónico aplicado en este desarrollo.
+* 📁 `.github/workflows/`: Pipeline de CI/CD automatizado.
+* 📁 `proceso/`: Cuadernos de producción (Extracción, Transformación, Carga, Permisos).
+* 📁 `PrepAmb/`: Configuración inicial del entorno.
+* 📁 `dashboard/`: Visualizaciones de KPIs.
+* 📁 `evidencias/`: Pruebas de ejecución exitosa.
+* 📁 `certifications/`: Credenciales técnicas (Databricks Lakehouse Fundamentals).
 
 ---
 
-## ✅ Evidencias de Ejecución Exitosa
+## ✅ Evidencias de Ejecución
+1. **Orquestación (Workflows):** Ejecución total del DAG con estado *Succeeded*. (`evidencias/01_workflow_exitoso_medallion.png`)
+2. **Gobierno (Unity Catalog):** Estructura centralizada y auditada en esquemas bronze, silver y gold. (`evidencias/02_evidencia_unity_catalog.png`)
+3. **CI/CD (GitHub Actions):** Despliegue automatizado directo a Databricks con cada commit en `main`. (`evidencias/03_evidencia_cicd_github.png`)
 
-### 1. Orquestación del Pipeline (Workflows)
-El flujo completo de notebooks se encuentra orquestado mediante un grafo dirigido acíclico (DAG) en Databricks Workflows, ejecutándose de inicio a fin con estado **Succeeded**.
-*Ver evidencia en:* `evidencias/01_workflow_exitoso_medallion.png`
+---
 
-### 2. Gobierno de Datos (Unity Catalog)
-Toda la estructura de datos está centralizada y auditada a través de Unity Catalog, garantizando la persistencia física de los esquemas `bronze`, `silver` y `gold`.
-*Ver evidencia en:* `evidencias/02_evidencia_unity_catalog.png`
-
-### 3. Integración Continua (GitHub Actions)
-Cada cambio subido a la rama `main` dispara automáticamente un agente en la nube que valida el código e implementa los cuadernos directo en el espacio de trabajo de Azure Databricks mediante la API oficial.
-*Ver evidencia en:* `evidencias/03_evidencia_cicd_github.png`
+## 🎯 Conclusión y Resultados
+La implementación de este pipeline bajo una arquitectura **Medallion** no solo estandariza el flujo de datos, sino que garantiza una alta disponibilidad de la información para la toma de decisiones clínicas. Gracias a la integración de **CI/CD**, hemos logrado un sistema ágil y seguro, capaz de reducir los tiempos de respuesta hospitalaria mediante la gestión proactiva de recursos biomédicos y el monitoreo constante del paciente.
