@@ -1,0 +1,44 @@
+YAML
+# =====================================================================
+# DEPLOY.YML: PIPELINE AUTOMATIZADO DE CI/CD PARA PROYECTO DE SALUD
+# =====================================================================
+name: Deploy ETL Medallion Pipeline to Databricks
+
+on:
+  push:
+    branches:
+      - main  # Se dispara automáticamente cuando subes cambios a la rama principal
+
+jobs:
+  deploy:
+    name: Deploy to Production Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código del repositorio de GitHub en el agente virtual
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Configurar el entorno de Python requerido para las herramientas de Databricks
+      - name: Set up Python
+        uses: actions/workflows/.github/actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      # 3. Instalar el CLI oficial de Databricks para la comunicación con el Workspace
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+      # 4. Sincronizar los archivos del repositorio directamente al entorno de producción en Databricks
+      # Nota: Requiere configurar los Secrets (DATABRICKS_HOST y DATABRICKS_TOKEN) en GitHub
+      - name: Deploy Repos to Databricks Workspace
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          print("Iniciando sincronización automática con el entorno de Azure Databricks...")
+          databricks workspace import-dir ./proceso /Production/proyecto_salud/proceso --overwrite
+          databricks workspace import-dir ./PrepAmb /Production/proyecto_salud/PrepAmb --overwrite
+          databricks workspace import-dir ./seguridad /Production/proyecto_salud/seguridad --overwrite
+          print("¡Despliegue continuo ejecutado con éxito total!")
