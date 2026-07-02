@@ -1,44 +1,31 @@
-YAML
-# =====================================================================
-# DEPLOY.YML: PIPELINE AUTOMATIZADO DE CI/CD PARA PROYECTO DE SALUD
-# =====================================================================
-name: Deploy ETL Medallion Pipeline to Databricks
+name: Deploy Databricks Pipeline
 
 on:
   push:
     branches:
-      - main  # Se dispara automáticamente cuando subes cambios a la rama principal
+      - main
 
 jobs:
   deploy:
-    name: Deploy to Production Environment
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Descargar el código del repositorio de GitHub en el agente virtual
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Configurar el entorno de Python requerido para las herramientas de Databricks
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      # 3. Instalar el CLI oficial de Databricks para la comunicación con el Workspace
       - name: Install Databricks CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          pip install databricks-cli
 
-      # 4. Sincronizar los archivos del repositorio directamente al entorno de producción en Databricks
-      # Nota: Requiere configurar los Secrets (DATABRICKS_HOST y DATABRICKS_TOKEN) en GitHub
-      - name: Deploy Repos to Databricks Workspace
+      - name: Deploy Notebooks to Workspace
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          print("Iniciando sincronización automática con el entorno de Azure Databricks...")
-          databricks workspace import-dir ./proceso /Production/proyecto_salud/proceso --overwrite
-          databricks workspace import-dir ./PrepAmb /Production/proyecto_salud/PrepAmb --overwrite
-          databricks workspace import-dir ./seguridad /Production/proyecto_salud/seguridad --overwrite
-          print("¡Despliegue continuo ejecutado con éxito total!")
+          echo "Conectando con Azure Databricks..."
+          databricks workspace import_dir ./proceso /Users/${{ secrets.DATABRICKS_TOKEN_USER || 'n.sterlingc@outlook.com' }}/proceso --overwrite
