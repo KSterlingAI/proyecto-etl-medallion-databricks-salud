@@ -21,7 +21,7 @@ jobs:
 
       # 2. Configurar el entorno de Python requerido para las herramientas de Databricks
       - name: Set up Python
-        uses: actions/workflows/.github/actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
