@@ -101,12 +101,13 @@ No todos los datos deben ser visibles para todos. Por eso:
 
 - La capa **Gold** (los reportes finales) es de lectura abierta para el equipo, pensada para consumirse en dashboards.
 - Las capas **Bronze** y **Silver** tienen acceso más restringido, pensado solo para trazabilidad técnica.
+- La conexión hacia la capa raw (Azure Data Lake Storage Gen2) se realiza **exclusivamente mediante Managed Identity**, a través de un Access Connector for Azure Databricks vinculado a una Storage Credential en Unity Catalog. No se usan claves de acceso ni SAS tokens.
 
 Todos estos permisos están escritos como código en `seguridad/05_grants.sql`, así quedan documentados y se pueden revisar como cualquier otra parte del proyecto.
 
 ---
 
-## Evidencias de que el pipeline funciona
+## Evidencias de ejecución
 
 **El proceso completo corrió exitosamente de principio a fin:**
 <p align="center"><img src="evidencias/01_workflow_exitoso_medallion.png" alt="Workflow exitoso" width="85%"></p>
@@ -116,6 +117,12 @@ Todos estos permisos están escritos como código en `seguridad/05_grants.sql`, 
 
 **El despliegue automático funcionó con GitHub Actions:**
 <p align="center"><img src="evidencias/03_evidencia_cicd_github.png" alt="CI/CD GitHub Actions" width="85%"></p>
+
+**El Access Connector de Azure provee la Managed Identity usada para el acceso al storage:**
+<p align="center"><img src="evidencias/04_evidencia_managed_identity.png" alt="Access Connector Managed Identity" width="85%"></p>
+
+**La Storage Credential en Unity Catalog confirma el uso de Managed Identity (`AzureManagedIdentity`), sin claves ni secretos:**
+<p align="center"><img src="evidencias/05_evidencia_storage_credential_managed_identity.png" alt="Storage Credential Managed Identity" width="85%"></p>
 
 ---
 
