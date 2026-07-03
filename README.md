@@ -78,6 +78,7 @@ Todo esto vive dentro de **Unity Catalog**, que es el sistema de Databricks que 
 - `datasets/` — los datos de origen (sintéticos) usados como entrada.
 - `dashboard/` — las imágenes de los KPIs finales.
 - `evidencias/` — capturas que muestran que el pipeline corrió exitosamente.
+- `certificaciones/` — credenciales técnicas que respaldan el proyecto, como Databricks Lakehouse Fundamentals.
 - `.github/workflows/` — la automatización que despliega el proyecto solo.
 
 ---
